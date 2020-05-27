@@ -36,7 +36,8 @@
 	
 	
 	
-	
+	<mvc:view-controller path="/" view-name="index" />
+	<mvc:view-controller path="/user/toLogin" view-name="login"/>
 	
 	<bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
 		<property name="templateResolver" ref="templateResolver"/>
@@ -50,6 +51,17 @@
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="2097152"/>
 	</bean>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/static/**"/>
+			<mvc:exclude-mapping path="/code"/>
+			<mvc:exclude-mapping path="/user/toLogin"/>
+			<mvc:exclude-mapping path="/user/login"/>
+			<bean class="com.etoak.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	
 	

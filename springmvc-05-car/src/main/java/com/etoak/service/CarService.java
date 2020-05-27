@@ -11,7 +11,7 @@ import com.etoak.bean.PageVo;
 public interface CarService {
 	int addCar(Car car);
 	
-	PageVo<CarVo> queryList(int pageNum,int pageSize,CarVo carVo);
+	PageVo<CarVo> queryList(int pageNum,int pageSize,CarVo carVo, String[] priceList);
 	
 	List<String> getAllBrand();
 	

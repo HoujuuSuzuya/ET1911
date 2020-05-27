@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<link th:href="@{/static/bootstrap/css/bootstrap.min.css}"
+			rel="stylesheet">
+		<title>车辆列表</title>
+		<style type="text/css">
+			.carPage{
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>车辆列表</h2>
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		    <div class="panel panel-default">
+		    	<form class="form-horizontal" role="form">
+		    		<div class="form-group">
+				        <div class="panel-heading" role="tab" id="headingOne">
+				        	<h4 class="panel-title">
+				          		<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				            		选择想要的品牌和车系
+				        		</a>
+				      		</h4>
+				    	</div>
+					    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+					        <div class="panel-body" id="brand">
+							
+							</div>
+							<div class="panel-body" id="series">
+								
+							</div>
+								<input type="hidden" id="bra"/>
+								<input type="hidden" id="ser"/>
+					    </div>
+				    </div>
+				    <div class="form-group">
+				    	<label for="price" class="col-sm-2 control-label">价格</label>
+					   <div class="col-sm-10" id="price">
+					     
+					   </div>
+				    </div>
+				    
+				    <div class="form-group">
+				    	<label for="vehicle_age" class="col-sm-2 control-label">车龄</label>
+					   <div class="col-sm-10" id="vehicle_age">
+					     
+					   </div>
+				    </div>
+				    
+				  	<div class="form-group">
+				 		  <!-- 级别 -->
+					   <label for="level" class="col-sm-2 control-label">级别</label>
+					   <div class="col-sm-3">
+					     <select class="form-control" name="level" id="level">
+					      <option value=''>--请选择--</option>
+					     </select>
+					   </div>
+					   
+					   <!-- 变速箱 -->
+					   <label for="gearbox" class="col-sm-2 control-label">变速箱</label>
+					   <div class="col-sm-3">
+					     <select class="form-control" name="gearbox" id="gearbox">
+					      <option value=''>--请选择--</option>
+					     </select>
+					   </div>
+					</div>
+					
+					<div class="form-group">
+					   <!-- 排量 -->
+					   <label for="output_volume" class="col-sm-2 control-label">
+					   排量</label>
+					   <div class="col-sm-3">
+					     <select class="form-control" name="output_volume" 
+					     id="output_volume">
+					      <option value=''>--请选择--</option>
+					     </select>
+					   </div>
+					   
+					   <!-- 归属地 -->
+					   <label for="location" class="col-sm-2 control-label">
+					   	归属地</label>
+					   <div class="col-sm-3">
+					     <input class="form-control" type="text" name="location"
+					      id="location">
+					   </div> 
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		
+		<div class="container-fluid">
+			<div class="row" id="carList">
+			
+			</div>
+		</div>
+		<div class="carPage" >
+			<button id="firstPage" class="btn btn-primary" type="button">首页</button>
+			<button id="prePage" class="btn btn-success" type="button">上一页</button>
+			<button id="nextPage" class="btn btn-info" type="button">下一页</button>
+			<button id="lastPage" class="btn btn-danger" type="button">尾页</button>
+		</div>
+		
+		
+		
+		<script type="text/javascript" th:src="@{/static/js/jquery/jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/static/js/jquery/jquery.validate.min.js}"></script> 
+		<script type="text/javascript" th:src="@{/static/js/jquery/messages_zh.min.js}"></script>
+		<script type="text/javascript" th:src="@{/static/js/laydate/laydate.js}"></script>
+		<script type="text/javascript" th:inline="javascript">
+			const path = /*[[${#request.getContextPath()}]]*/
+			
+			let brand = ''
+			let series = ''
+			let currentPage = 1
+			let pageCount = ''
+			
+			$(function(){
+				et1911.queryList()
+				et1911.queryBrand()
+				et1911.querySeries()
+				et1911.queryDict('level')
+				et1911.queryDict('gearbox')
+				et1911.queryDict('output_volume')
+				
+				et1911.getPriceDict('dict')
+				et1911.getVehicleAgeDict('vehicle_age')
+				
+				$('#firstPage').click(function(){
+					et1911.queryList()
+				})
+				
+				$('#prePage').click(function(){
+					et1911.queryList(--currentPage)
+				})
+				
+				$('#nextPage').click(function(){
+					et1911.queryList(++currentPage)
+				})
+				
+				$('#lastPage').click(function(){
+					et1911.queryList(pageCount)
+				})
+				
+				$('#series').change(function(){
+					et1911.queryList()
+				})
+				$('#level').change(function(){
+					et1911.queryList()
+				})
+				$('#gearbox').change(function(){
+					et1911.queryList()
+				})
+				$('#output_volume').change(function(){
+					et1911.queryList()
+				})
+				$('#location').change(function(){
+					et1911.queryList()
+				})
+			})
+			
+		 	function querySeriesByBrand(value){
+				$('#bra').val(value)
+				et1911.queryList()
+				$.ajax({
+					url:path + '/car/getSeries',
+					type:'GET',
+					data: "brand="+value,
+					dataType:'json',
+					success:function(Series){
+						let divs = ''
+						$.each(Series,function(index,s){
+							divs += "<input class='btn btn-default' type='button' value='" + s + "' onclick='queryListByCheck(this.value)' />"
+						})
+						$('#ser').val(Series)
+						$('#series').html(divs)
+						
+					}
+					
+				})
+			}
+			
+				
+				
+			
+			let et1911 = {
+					
+				getPriceDict: function(){
+					$.ajax({
+						url:path + '/dict/price',
+						type:'get',
+						data:'',
+						dataType:'json',
+						success:function(res){
+							let checkbox = ''
+							for(dict of res){
+								checkbox += "<label class='checkbox-inline'>"
+								+"<input type='checkbox' name='price' value='"+dict.value+"'>"
+								+dict.name+"</label>"
+							}
+							$('#price').html(checkbox)
+						}
+					})
+				},
+				
+				getVehicleAgeDict:function(){
+					$.ajax({
+						url:path + '/dict/vehicle_age',
+						type:'get',
+						data:'',
+						dataType:'json',
+						success:function(res){
+							let radio = ''
+							$.each(res,function(i,dict){
+								radio += "<label class='radio-inline'>"
+									+"<input type='radio' name='vehicle_age' value='"
+									+dict.value+"'>"+dict.name+"</label>"
+							})
+							$('#vehicle_age').html(radio)
+						}
+					})
+				},
+					
+				queryDict:function(groupId){
+					$.ajax({
+						url:path + '/dict/' + groupId,
+						type:'get',
+						dataType:'json',
+						data:'',
+						success:function(res){
+							let options = '<option value="">--请选择--</option>'
+							for(let dict of res){
+								options += "<option value='" +dict.value+ "'>" 
+								+dict.name
+								+"</option>"
+							}
+							$('#'+groupId).html(options)
+						}
+					})
+				},
+					
+					
+					
+					
+				queryBrand:function(){
+					
+					$.ajax({
+						url:path + '/car/getBrand',
+						type:'GET',
+						data: "",
+						dataType:'json',
+						success:function(brand){
+							let divs = ''
+							$.each(brand,function(index,b){
+								divs += "<input class='btn btn-default' type='button' value='" + b + "' onclick='querySeriesByBrand(this.value)' />"
+							})
+							$('#brand').html(divs)
+							
+						}
+						
+						
+					})
+				},
+				
+				querySeries:function(){
+					
+					$.ajax({
+						url:path + '/car/getSeries',
+						type:'GET',
+						data: "", 
+						dataType:'json',
+						success:function(Series){
+							let divs = ''
+							$.each(Series,function(index,s){
+								divs += "<input class='btn btn-default' type='button' value='" + s + "' onclick='queryListByCheck(this.value)' />"
+							})
+							$('#series').html(divs)
+							
+						}
+						
+						
+					})
+				},
+				
+				
+					
+					
+					
+					
+				queryList:function(pageNum,pageSize){
+					
+					// 如果没值,取||后的值
+					pageNum = pageNum || 1
+					pageSize = pageSize || 8
+					let brand = $("#bra").val() || ''
+					let seriea = $("#ser").val() || ''
+					let level = $("#level").val() || ''
+					let gearbox = $("#gearbox").val() || ''
+					let outputVolume = $('#output_volume').val() || ''
+					let location = $("#location").val() || ''
+					
+					$.ajax({
+						url:path + '/car/list',
+						type:'GET',
+						data: 'pageNum=' + pageNum + '&pageSize=' + pageSize + '&brand=' + brand
+							+"&series="+series+"&level="+level+"&gearbox="+gearbox
+							+'&outputVolume=' + outputVolume+"&location="+location,
+						dataType:'json',
+						success:function(res){
+							let divs = ''
+							currentPage = res.pageNum
+							pageCount = res.pageCount
+							$.each(res.rows,function(index,car){
+								divs += "<div class='col-md-3'>"
+									+"<img class='img-thumbnail' src='" + path + car.pic +"' width='200' height='200' />"
+									+"<p>" + car.brand + " / " +car.series + "</p>"
+									+"<p>" + car.price + "万元</p>"
+									+"<p>" + car.gearboxName + "</p>"
+									+"</div>"
+							})
+							$('#carList').html(divs)
+							
+							if(res.first){
+								$('#firstPage').attr('disabled','disabled')
+								$('#prePage').attr('disabled','disabled')
+							}else{
+								$('#firstPage').removeAttr('disabled')
+								$('#prePage').removeAttr('disabled')
+							}
+							
+							if(res.last){
+								$('#lastPage').attr('disabled','disabled')
+								$('#nextPage').attr('disabled','disabled')
+							}else{
+								$('#lastPage').removeAttr('disabled')
+								$('#nextPage').removeAttr('disabled')
+							}
+						}
+						
+						
+					})
+				}
+			}
+		
+		
+		</script>
+		
+	</body>
+</html>

@@ -87,8 +87,8 @@ public class CarContorller {
 	@ResponseBody
 	public PageVo<CarVo> queryList(@RequestParam (required = false,defaultValue = "1") int pageNum,
 			@RequestParam (required = false,defaultValue = "8") int pageSize,
-			CarVo carVo){
-		return carService.queryList(pageNum, pageSize, carVo);
+			CarVo carVo,String[] priceList){
+		return carService.queryList(pageNum, pageSize, carVo,priceList);
 	}
 	
 	@GetMapping("/getBrand")

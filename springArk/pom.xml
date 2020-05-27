@@ -1,19 +1,17 @@
 <?xml version="1.0"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.etoak.et1911</groupId>
-		<artifactId>et1911</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>springmvc-05-car</artifactId>
-	<packaging>war</packaging>
-	<name>springmvc-05-car Maven Webapp</name>
-	<url>http://maven.apache.org</url>
-	<dependencies>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.etoak.et1911</groupId>
+    <artifactId>et1911</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>springArk</artifactId>
+  <packaging>war</packaging>
+  <name>springArk Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -81,15 +79,10 @@
 		<dependency>
 				<groupId>org.hibernate.validator</groupId>
 				<artifactId>hibernate-validator</artifactId>
-		</dependency>
-		
-		<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-		</dependency>
+			</dependency>
 
 	</dependencies>
-	<build>
-		<finalName>springmvc-05-car</finalName>
-	</build>
+  <build>
+    <finalName>springArk</finalName>
+  </build>
 </project>
